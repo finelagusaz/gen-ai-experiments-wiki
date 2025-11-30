@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 実験データを収集してStats.mdとグラフを自動生成するスクリプト
 
@@ -6,7 +7,14 @@
     python scripts/update_stats.py
 """
 
+import sys
+import io
 import re
+
+# Windows環境での文字化け対策
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 import json
 from pathlib import Path
 from collections import Counter, defaultdict
