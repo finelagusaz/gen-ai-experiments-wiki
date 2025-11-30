@@ -46,12 +46,16 @@ def parse_experiment(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
+    # ファイル名からIDを取得（例: 001.md -> 001）
     data = {"id": file_path.stem}
 
-    # タイトル抽出
+    # タイトルからIDを抽出（ただしファイル名優先）
     title_match = re.search(r'# 実験 (.+?):', content)
     if title_match:
-        data["id"] = title_match.group(1).strip()
+        title_id = title_match.group(1).strip()
+        # "ID"のようなプレースホルダーでなければ使用
+        if title_id and title_id != "ID":
+            data["id"] = title_id
 
     # 基本情報抽出
     date_match = re.search(r'- 日付: (.+)', content)
@@ -70,16 +74,20 @@ def parse_experiment(file_path):
     if target_match:
         data["target"] = target_match.group(1).strip()
 
-    # 評価抽出
-    rating_match = re.search(r'\*\*評価: ([◎○△❌])\*\*', content)
+    # 評価抽出 (〇を○に正規化)
+    rating_match = re.search(r'\*\*評価: ([◎○〇△❌])\*\*', content)
     if rating_match:
-        data["rating"] = rating_match.group(1).strip()
+        rating = rating_match.group(1).strip()
+        # 全角0を○に正規化
+        rating = rating.replace('〇', '○')
+        data["rating"] = rating
 
-    # タグ抽出
-    tags_match = re.search(r'\*\*タグ:\*\* `(.+?)`', content)
+    # タグ抽出 (バッククォートとバックスラッシュエスケープ対応)
+    tags_match = re.search(r'\*\*タグ:\*\*.*', content)
     if tags_match:
         tags_text = tags_match.group(0)
-        data["tags"] = re.findall(r'`([^`]+)`', tags_text)
+        # \`tag\` または `tag` の形式に対応
+        data["tags"] = re.findall(r'\\?`([^`\\]+)\\?`', tags_text)
     else:
         data["tags"] = []
 
