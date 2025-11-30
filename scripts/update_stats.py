@@ -29,7 +29,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 # ディレクトリ設定
 BASE_DIR = Path(__file__).parent.parent
-EXPERIMENTS_DIR = BASE_DIR / "experiments"
+EXPERIMENTS_DIR = BASE_DIR  # 実験ファイルはルートディレクトリに配置
 IMAGES_DIR = BASE_DIR / "images"
 STATS_FILE = BASE_DIR / "Stats.md"
 
@@ -97,7 +97,8 @@ def parse_experiment(file_path):
 def collect_experiments():
     """全実験データを収集"""
     experiments = []
-    for exp_file in sorted(EXPERIMENTS_DIR.glob("*.md")):
+    # ルートディレクトリの数字で始まる.mdファイルを実験ファイルとして扱う
+    for exp_file in sorted(EXPERIMENTS_DIR.glob("[0-9]*.md")):
         try:
             exp_data = parse_experiment(exp_file)
             experiments.append(exp_data)
