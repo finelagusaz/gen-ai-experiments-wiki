@@ -235,7 +235,7 @@ def generate_stats_md(experiments, stats):
 
     content = f"""# 統計・分析
 
-[[Home|← トップへ]]
+[← トップへ](./Home)
 
 最終更新: {today}
 
@@ -281,7 +281,7 @@ def generate_stats_md(experiments, stats):
 """
 
     for tag, count in stats['tag_counts'].most_common():
-        exp_links = ", ".join([f"[[{exp_id}]]" for exp_id in stats['tag_experiments'][tag]])
+        exp_links = ", ".join([f"[{exp_id}](./{exp_id})" for exp_id in stats['tag_experiments'][tag]])
         content += f"| {tag} | {count} | {exp_links} |\n"
 
     content += """
