@@ -24,7 +24,7 @@ import matplotlib
 matplotlib.use('Agg')  # GUI不要のバックエンド
 
 # 日本語フォント設定
-plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial']
+plt.rcParams['font.sans-serif'] = ['Meiryo','DejaVu Sans', 'Arial']
 plt.rcParams['axes.unicode_minus'] = False
 
 # ディレクトリ設定
